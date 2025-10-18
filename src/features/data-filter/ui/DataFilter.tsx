@@ -1,7 +1,8 @@
+import { useCompanies } from '@/providers';
 import { DownloadOutlined, FilterOutlined } from '@ant-design/icons';
-import { Badge, Button, Drawer, FloatButton, Form, Select, Space, } from 'antd';
+import { Badge, Button, Drawer, FloatButton, Form, message, Select, Space, } from 'antd';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
     className?: string;
@@ -13,8 +14,14 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const [mode, setMode] = useState<Mode>('filter');
+    const { loading: companyLoading, companiesUnique, selectCompanies, selectedIds, } = useCompanies();
 
     const [selectedFiltersCount, setSelectedFiltersCount] = useState(0);
+
+    useEffect(() => {
+        form.setFieldValue('company', selectedIds)
+    }, [companiesUnique])
+
 
     const showDrawer = (mode: Mode = 'filter') => {
         setOpen(true);
@@ -50,10 +57,7 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
     // Обработчик применения фильтров
     const handleApplyFilters = async () => {
         try {
-            await form.validateFields()
-
-            updateFiltersCount();
-            onClose();
+            form.submit();
         } catch (err) { }
     };
 
@@ -67,8 +71,19 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
         setSelectedFiltersCount(0);
     };
 
+    const handleSubmitForm = (values: any) => {
+        try {
+            const { company, } = values;
+            selectCompanies(company)
+            onClose();
+        } catch (err) {
+            console.log(err);
+            message.warning("Не удалось применить фильтры")
+        } finally {
+            updateFiltersCount();
 
-
+        }
+    }
 
     return (
         <>
@@ -167,7 +182,22 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
                     form={form}
                     layout='vertical'
                     onFieldsChange={handleFormChange}
+                    onFinish={handleSubmitForm}
                 >
+                    <Form.Item name="company" label="Организации:">
+                        <Select
+                            mode='multiple'
+                            loading={companyLoading}
+                            placeholder="Выбранные организации..."
+                        >
+                            {companiesUnique.map(c => (
+                                <Select.Option key={c.id} value={c.id}>
+                                    {c.name}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
+
                     <Form.Item
                         name="year"
                         label="Год"
@@ -260,7 +290,6 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
                     <Form.Item
                         name="confirmed"
                         label="Подтвержден"
-                        rules={[{ required: true, message: 'Укажите статус' }]}
                     >
                         <Select placeholder="Выберите статус">
                             <Select.Option value="confirmed">Подтвержден пользователем</Select.Option>

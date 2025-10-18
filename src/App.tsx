@@ -2,7 +2,7 @@ import React from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import ruRu from 'antd/locale/ru_Ru';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider, UploadModalProvider } from '@/providers';
+import { AuthProvider, CompaniesProvider, UploadModalProvider } from '@/providers';
 import { PrivateRoute, PublicRoute } from '@/components';
 import { AuthPage, SignupPage } from '@/pages/auth';
 import { MainLayout } from '@/layouts';
@@ -49,59 +49,61 @@ export const App: React.FC<Props> = () => {
     >
       <BrowserRouter>
         <AuthProvider>
-          <UploadModalProvider>
-            <div className="main-app">
-              <Routes>
-                {/* --------- Роуты без лейаута --------- */}
-                <Route
-                  path="/auth"
-                  element={
-                    <PublicRoute>
-                      <AuthPage />
-                    </PublicRoute>
-                  }
-                />
-
-                <Route
-                  path='/signup'
-                  element={
-                    <PublicRoute>
-                      <SignupPage />
-                    </PublicRoute>
-                  }
-                />
-
-
-                {/* --------- Роуты с лейаутом --------- */}
-                <Route element={<MainLayout />}>
+          <CompaniesProvider>
+            <UploadModalProvider>
+              <div className="main-app">
+                <Routes>
+                  {/* --------- Роуты без лейаута --------- */}
                   <Route
-                    path="/"
+                    path="/auth"
                     element={
-                      <PrivateRoute>
-                        <Dashboard />
-                      </PrivateRoute>
+                      <PublicRoute>
+                        <AuthPage />
+                      </PublicRoute>
                     }
                   />
+
                   <Route
-                    path="/kp"
+                    path='/signup'
                     element={
-                      <PrivateRoute>
-                        <KpPage />
-                      </PrivateRoute>
+                      <PublicRoute>
+                        <SignupPage />
+                      </PublicRoute>
                     }
                   />
-                  <Route
-                    path='/organizations'
-                    element={
-                      <PrivateRoute>
-                        <OrganizationsPage />
-                      </PrivateRoute>
-                    }
-                  />
-                </Route>
-              </Routes>
-            </div>
-          </UploadModalProvider>
+
+
+                  {/* --------- Роуты с лейаутом --------- */}
+                  <Route element={<MainLayout />}>
+                    <Route
+                      path="/"
+                      element={
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="/kp"
+                      element={
+                        <PrivateRoute>
+                          <KpPage />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path='/organizations'
+                      element={
+                        <PrivateRoute>
+                          <OrganizationsPage />
+                        </PrivateRoute>
+                      }
+                    />
+                  </Route>
+                </Routes>
+              </div>
+            </UploadModalProvider>
+          </CompaniesProvider>
         </AuthProvider>
       </BrowserRouter>
     </ConfigProvider>

@@ -56,4 +56,12 @@
             color: #fff !important;
         }
     }
+
+    .tab-content {
+        display: none;
+
+        &.active-tab {
+            display: block;
+        }
+    }
 }

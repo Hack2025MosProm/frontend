@@ -1,5 +1,5 @@
 import { organizationApi } from '@/api';
-import type { Organization } from '@/api/organizations-api';
+import type { Company, } from '@/api/organizations-api';
 import { KpFormDrawer } from '@/features/kp-form';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, message, Space, Table, Typography } from 'antd';
@@ -11,8 +11,8 @@ interface Props {
 
 export const OrganizationsPage: React.FC<Props> = ({ className }) => {
     const [loading, setLoading] = useState(false);
-    const [items, setItems] = useState<Organization[]>([]);
-    const [editingOrganization, setEditingOrganization] = useState<Organization | null>(null);
+    const [items, setItems] = useState<Company[]>([]);
+    const [editingOrganization, setEditingOrganization] = useState<Company | null>(null);
     const [newOrg, setNewOrg] = useState(false);
 
     useEffect(() => {
@@ -22,10 +22,8 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
     const fetchOrganizations = async () => {
         try {
             setLoading(true);
-            const { data } = await organizationApi.getAll();
-            //const r = await organizationApi.getCompanies();
-            //console.log(r.data);
-            setItems(data);
+            const data = await organizationApi.getCompanies();
+            setItems(data || []);
         } catch (err) {
             console.log(err);
             message.warning(`При загрузке организаций произошла ошибка!`);
@@ -68,7 +66,7 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
                         ),
                     }
                 ]}
-                rowKey={'inn'}
+                rowKey={'id'}
                 loading={loading}
                 dataSource={items}
             />

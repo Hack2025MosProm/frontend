@@ -1,11 +1,11 @@
-import type { Organization } from '@/api/organizations-api';
+import type { Company, } from '@/api/organizations-api';
 import { Drawer } from 'antd';
 import React from 'react';
 import { KpForm } from './KpForm';
 
 interface Props {
     opened?: boolean;
-    organization?: Organization;
+    organization?: Company;
     onClose?: () => void
 }
 

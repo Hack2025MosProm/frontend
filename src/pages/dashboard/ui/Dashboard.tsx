@@ -1,99 +1,90 @@
-import { CompanyList } from '@/features/company-list';
-import { StatisticCard } from '@/features/statistic-card';
 import React from 'react';
-import plot1 from '@/assets/images/plots/plot1.png';
-import plot2 from '@/assets/images/plots/plot2.png';
-import plot3 from '@/assets/images/plots/plot3.png';
-import { Card, Col, Divider, Row, Statistic, Typography } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined, } from '@ant-design/icons';
+import { Col, Row, Skeleton } from 'antd';
 import { DataFilter } from '@/features/data-filter';
+import { useGraphs } from '@/features/graphs';
+import { useCompanies } from '@/providers';
+import Plot from 'react-plotly.js';
+import LazyLoad from 'react-lazy-load';
 
 interface Props {
     className?: string;
 }
 
-export const Dashboard: React.FC<Props> = ({ className }) => {
-    const data = {
-        revenue: 106150000,    // Выручка
-        profit: 6650000,       // Прибыль
-        loss: -90000          // Убыток
-    };
+// Конфигурация размеров для разных типов графиков
+const graphSizes = {
+    "treemap_prod": {
+        col: 24,
+        height: 800,
+    },
+    "scatter_busy": {
+        col: 12,
+        height: 600,
+    },
+    "norm_export": {
+        col: 12,
+        height: 600,
+    },
+    "pie_prod": {
+        col: 12,
+        height: 600,
+    },
+    "area_ecology": {
+        col: 12,
+        height: 600,
+    },
+    "hist_energy": {
+        col: 12,
+        height: 600,
+    },
+    "table_invest": {
+        col: 12,
+        height: 600,
+    }
+} as const;
 
-    const formatValue = (value: number) => {
-        return `${(value / 1000).toLocaleString('ru-RU')}`;
+// Функция для получения настроек размера по типу графика
+const getGraphSize = (graphType: string) => {
+    return graphSizes[graphType as keyof typeof graphSizes] || {
+        col: 12,
+        height: 500,
     };
+};
+
+export const Dashboard: React.FC<Props> = ({ className }) => {
+    const { loading } = useCompanies();
+    const { graphs, loading: graphLoading } = useGraphs();
+
+    console.log(graphs);
 
     return (
         <div className={className}>
-            <h1>Компании Москвы</h1>
-            <StatisticCard />
+            <Skeleton active={loading || graphLoading} loading={loading || graphLoading}>
+                <h1>Дашборд</h1>
 
-            <DataFilter />
+                <Row gutter={[32, 32]}>
+                    {graphs.map((graph) => {
+                        const sizeConfig = getGraphSize(graph.graph_type);
 
-            <Typography.Title>Индикаторы</Typography.Title>
-            <div className={`finance-cards ${className || ''}`}>
-                <Row gutter={[16, 16]}>
-                    {/* Карточка Выручки */}
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card className="finance-card revenue-card">
-                            <Statistic
-                                title="Выручка предприятия, тыс. руб."
-                                value={formatValue(data.revenue)}
-                                valueStyle={{ color: '#1890ff' }}
-                                suffix="тыс. руб."
-                            />
-                            <div className="card-subtitle">Индикатор-Выручка</div>
-                        </Card>
-                    </Col>
-
-                    {/* Карточка Прибыли */}
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card className="finance-card profit-card">
-                            <Statistic
-                                title="Чистая прибыль, тыс. руб."
-                                value={formatValue(data.profit)}
-                                valueStyle={{ color: '#3f8600' }}
-                                prefix={<ArrowUpOutlined />}
-                                suffix="тыс. руб."
-                            />
-                            <div className="card-subtitle">Индикатор-Прибыль</div>
-                        </Card>
-                    </Col>
-
-                    {/* Карточка Убытка */}
-                    <Col xs={24} sm={12} lg={8}>
-                        <Card className="finance-card loss-card">
-                            <Statistic
-                                title="Чистая прибыль (убыток), тыс. руб."
-                                value={formatValue(data.loss)}
-                                valueStyle={{ color: '#cf1322' }}
-                                prefix={<ArrowDownOutlined />}
-                                suffix="тыс. руб."
-                            />
-                            <div className="card-subtitle">Индикатор-Убыток</div>
-                        </Card>
-                    </Col>
+                        return (
+                            <Col key={graph.id} lg={sizeConfig.col}>
+                                <LazyLoad height={sizeConfig.height}>
+                                    <Plot
+                                        data={graph.graph_data.data}
+                                        layout={{
+                                            ...graph.graph_data.layout,
+                                            height: sizeConfig.height,
+                                        }}
+                                        style={{ width: '100%', height: `${sizeConfig.height}px` }}
+                                        config={{ responsive: true }}
+                                    />
+                                </LazyLoad>
+                            </Col>
+                        );
+                    })}
                 </Row>
-            </div>
 
-            <Divider />
-
-            <Typography.Title>Графики</Typography.Title>
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 40,
-            }}>
-                <img src={plot1} />
-                <Divider />
-                <img src={plot2} />
-                <Divider />
-                <img src={plot3} />
-            </div>
-            <Divider />
-            <br />
-            <h2>Рейтинг компаний Москвы (по выручке)</h2>
-            <CompanyList />
+                <DataFilter />
+            </Skeleton>
         </div>
     );
 };
