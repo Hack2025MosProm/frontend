@@ -1,0 +1,1 @@
+export { KpPage } from './ui/KpPage'

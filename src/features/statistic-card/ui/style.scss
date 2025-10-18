@@ -1,0 +1,145 @@
+.statistics-container {
+    width: 100%;
+}
+
+.histogram {
+    margin-bottom: 24px;
+    padding: 20px;
+    //background: #fafafa;
+    border-radius: 8px;
+
+    &-bars {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        height: 100px;
+        width: 200px;
+        padding: 0 20px;
+        gap: 16px;
+    }
+
+    &-bar {
+        flex: 1;
+        background: rgba(243, 240, 255, .6);
+        border: 2px solid #6c63ff;
+        border-radius: 4px 4px 0 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        min-width: 40px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+
+        &:hover {
+            background: #6c63ff;
+            //transform: scale(1.05);
+        }
+
+        &--active {
+            background: #6c63ff;
+            border-color: #6c63ff;
+
+            .histogram-bar-label {
+                color: #6c63ff;
+                font-weight: bold;
+            }
+        }
+
+        &-label {
+            position: absolute;
+            bottom: -25px;
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+    }
+}
+
+.year-data {
+    .year-title {
+        margin-bottom: 16px;
+        color: #262626;
+        font-size: 18px;
+        font-weight: 600;
+    }
+}
+
+.statistics-card-container {
+    &.ant-row {
+        margin: 0 -8px;
+    }
+}
+
+.statistics-card-col {
+    padding: 0 8px;
+}
+
+.statistics-card {
+    &.ant-card {
+        border: 1px solid #f0f0f0;
+        border-radius: 6px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+        transition: all 0.3s ease;
+
+        &:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+            border-color: #d9d9d9;
+        }
+    }
+}
+
+.statistic-item {
+    text-align: center;
+    padding: 8px 4px;
+
+    .statistic-label {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 4px;
+        line-height: 1.2;
+    }
+
+    .statistic-value {
+        font-size: 14px;
+        color: #262626;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+}
+
+.statistic-value-item {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.statistic-value-cost {
+    font-size: 3em;
+    font-weight: bold;
+    color: #6c63ff;
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+    .histogram-bars {
+        height: 80px;
+        padding: 0 10px;
+        gap: 8px;
+    }
+
+    .histogram-bar {
+        min-width: 30px;
+
+        &-label {
+            font-size: 10px;
+            bottom: -20px;
+        }
+    }
+
+    .statistics-card-col {
+        span: 24;
+    }
+}

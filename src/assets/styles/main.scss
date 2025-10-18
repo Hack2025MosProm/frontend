@@ -1,0 +1,21 @@
+@use "./media";
+@use "./theme";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.js-plotly-plot {
+    max-width: 100% !important;
+}
+
+.plot-container .plotly {
+    max-width: 100% !important;
+}
+
+.user-select-none .svg-container {
+    max-width: 100% !important;
+
+    .main-svg {
+        max-width: 100% !important;
+    }
+}
