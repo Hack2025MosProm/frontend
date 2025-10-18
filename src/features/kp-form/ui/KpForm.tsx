@@ -1,14 +1,15 @@
-import { Button, Col, Form, message, Row, Tabs } from 'antd';
+import { Button, Col, Form, Input, message, Row, Tabs } from 'antd';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import './style.scss'
 import { steps } from '../model/steps';
-import type { Organization } from '@/api/organizations-api';
+import type { Company } from '@/api/organizations-api';
+import dayjs from 'dayjs';
 
 
 interface Props {
     className?: string;
-    organization?: Organization
+    organization?: Company
 }
 
 export const KpForm: React.FC<Props> = ({ className, organization }) => {
@@ -89,11 +90,31 @@ export const KpForm: React.FC<Props> = ({ className, organization }) => {
         }
     };
 
+    const handleSubmit = async (values: any) => {
+        try {
+            const sendData = {
+                ...(organization || {}),
+                ...values,
+                ['Дата последнего изменения']: values['Дата последнего изменения'] ? dayjs(values['Дата последнего изменения']).format() : null,
+            };
+
+            console.log(sendData);
+        } catch (err) {
+
+        } finally { }
+    }
 
 
     return (
         <div className={clsx('kp-form', className)}>
-            <Form form={form} layout="vertical" onFinish={(data) => console.log(data)}>
+            <Form form={form} layout="vertical" onFinish={handleSubmit}>
+                <Form.Item hidden name="№">
+                    <Input />
+                </Form.Item>
+
+                <Form.Item hidden name="id">
+                    <Input />
+                </Form.Item>
                 <div style={{ margin: '20px 0' }}>
                     <Tabs
                         type='card'

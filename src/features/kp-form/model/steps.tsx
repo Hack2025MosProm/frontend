@@ -1,4 +1,4 @@
-import { Row, Col, Form, Input, Select, InputNumber } from "antd";
+import { Row, Col, Form, Input, Select, InputNumber, DatePicker } from "antd";
 
 export const steps = [
     // Шаг 1: Ключевые реквизиты
@@ -8,7 +8,7 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={24}>
                     <Form.Item
-                        name="inn"
+                        name="ИНН"
                         label="ИНН"
                         rules={[{ required: true, message: 'Укажите ИНН!' }]}
                     >
@@ -19,7 +19,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="name"
+                        name="Наименование организации"
                         label="Наименование организации"
                         rules={[{ required: true, message: 'Укажите наименование организации!' }]}
                     >
@@ -27,29 +27,29 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="organization_type"
+                        name="full_name"
+                        label="Полное наименование организации"
+                        rules={[{ required: true, message: 'Укажите полное наименование организации!' }]}
+                    >
+                        <Input placeholder="Полное наименование организации..." />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="Вид организации"
                         label="Тип организации"
                     >
                         <Select placeholder="Тип организации...">
-                            <Select.Option value="ooo">ООО</Select.Option>
-                            <Select.Option value="ao">АО</Select.Option>
-                            <Select.Option value="pao">ПАО</Select.Option>
-                            <Select.Option value="nao">НАО</Select.Option>
-                            <Select.Option value="ip">ИП</Select.Option>
-                            <Select.Option value="gup">ГУП</Select.Option>
-                            <Select.Option value="mup">МУП</Select.Option>
-                            <Select.Option value="pk">ПК</Select.Option>
-                            <Select.Option value="pt">ПТ</Select.Option>
-                            <Select.Option value="tnv">ТНВ</Select.Option>
-                            <Select.Option value="ano">АНО</Select.Option>
-                            <Select.Option value="fond">Фонд</Select.Option>
-                            <Select.Option value="uchrezhdenie">Учреждение</Select.Option>
-                            <Select.Option value="potrebitelsky_kooperativ">Потребительский кооператив</Select.Option>
-                            <Select.Option value="obshchestvennaya_organizaciya">Общественная организация</Select.Option>
-                            <Select.Option value="associaciya_soyuz">Ассоциация (союз)</Select.Option>
-                            <Select.Option value="kazennoe_uchrezhdenie">Казенное учреждение</Select.Option>
-                            <Select.Option value="budgetnoe_uchrezhdenie">Бюджетное учреждение</Select.Option>
-                            <Select.Option value="other">Другое</Select.Option>
+                            <Select.Option value="ООО">ООО</Select.Option>
+                            <Select.Option value="АО">АО</Select.Option>
+                            <Select.Option value="ПАО">ПАО</Select.Option>
+                            <Select.Option value="НАО">НАО</Select.Option>
+                            <Select.Option value="ИП">ИП</Select.Option>
+                            <Select.Option value="ГУП">ГУП</Select.Option>
+                            <Select.Option value="МУП">МУП</Select.Option>
+                            <Select.Option value="ПК">ПК</Select.Option>
+                            <Select.Option value="ПТ">ПТ</Select.Option>
+                            <Select.Option value="Казенное учреждение">Казенное учреждение</Select.Option>
+                            <Select.Option value="Бюджетное учреждение">Бюджетное учреждение</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -63,84 +63,50 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={24}>
                     <Form.Item
-                        name="main_industry"
+                        name="Основная отрасль"
                         label="Основная отрасль"
                         rules={[{ required: true, message: 'Выберите основную отрасль!' }]}
                     >
                         <Select placeholder="Выберите основную отрасль">
-                            <Select.Option value="manufacturing">Промышленное производство</Select.Option>
-                            <Select.Option value="construction">Строительство</Select.Option>
-                            <Select.Option value="it">Информационные технологии</Select.Option>
-                            <Select.Option value="trade">Торговля</Select.Option>
-                            <Select.Option value="transport">Транспорт и логистика</Select.Option>
-                            <Select.Option value="finance">Финансовые услуги</Select.Option>
-                            <Select.Option value="healthcare">Здравоохранение</Select.Option>
-                            <Select.Option value="education">Образование</Select.Option>
-                            <Select.Option value="agriculture">Сельское хозяйство</Select.Option>
-                            <Select.Option value="energy">Энергетика</Select.Option>
-                            <Select.Option value="medicine">Медицина</Select.Option>
-                            <Select.Option value="food">Пищевая промышленность</Select.Option>
-                            <Select.Option value="chemical">Химическая промышленность</Select.Option>
-                            <Select.Option value="metallurgy">Металлургия</Select.Option>
-                            <Select.Option value="machine_building">Машиностроение</Select.Option>
+                            <Select.Option value="Промышленное производство">Промышленное производство</Select.Option>
+                            <Select.Option value="Строительство">Строительство</Select.Option>
+                            <Select.Option value="Информационные технологии">Информационные технологии</Select.Option>
+                            <Select.Option value="Торговля">Торговля</Select.Option>
+                            <Select.Option value="Транспорт и логистика">Транспорт и логистика</Select.Option>
+                            <Select.Option value="Финансовые услуги">Финансовые услуги</Select.Option>
+                            <Select.Option value="Здравоохранение">Здравоохранение</Select.Option>
+                            <Select.Option value="Образование">Образование</Select.Option>
+                            <Select.Option value="Сельское хозяйство">Сельское хозяйство</Select.Option>
+                            <Select.Option value="Энергетика">Энергетика</Select.Option>
+                            <Select.Option value="Медицина">Медицина</Select.Option>
+                            <Select.Option value="Пищевая промышленность">Пищевая промышленность</Select.Option>
+                            <Select.Option value="Химическая промышленность">Химическая промышленность</Select.Option>
+                            <Select.Option value="Металлургия">Металлургия</Select.Option>
+                            <Select.Option value="Машиностроение">Машиностроение</Select.Option>
                         </Select>
                     </Form.Item>
 
                     <Form.Item
-                        name="main_subindustry"
-                        label="Подотрасль (Основная)"
-                        rules={[{ required: true, message: 'Выберите подотрасль!' }]}
-                    >
-                        <Select placeholder="Выберите подотрасль">
-                            <Select.Option value="food_manufacturing">Производство пищевых продуктов</Select.Option>
-                            <Select.Option value="textile">Текстильное производство</Select.Option>
-                            <Select.Option value="chemical">Химическое производство</Select.Option>
-                            <Select.Option value="metalworking">Металлообработка</Select.Option>
-                            <Select.Option value="electronics">Электроника и электротехника</Select.Option>
-                            <Select.Option value="machinery">Машиностроение</Select.Option>
-                            <Select.Option value="automotive">Автомобилестроение</Select.Option>
-                            <Select.Option value="pharmaceutical">Фармацевтическое производство</Select.Option>
-                            <Select.Option value="construction_materials">Производство строительных материалов</Select.Option>
-                            <Select.Option value="woodworking">Деревообработка</Select.Option>
-                            <Select.Option value="software_development">Разработка программного обеспечения</Select.Option>
-                            <Select.Option value="it_services">IT-услуги и консалтинг</Select.Option>
-                            <Select.Option value="telecom">Телекоммуникации</Select.Option>
-                            <Select.Option value="retail_trade">Розничная торговля</Select.Option>
-                            <Select.Option value="wholesale_trade">Оптовая торговля</Select.Option>
-                            <Select.Option value="ecommerce">Электронная коммерция</Select.Option>
-                        </Select>
-                    </Form.Item>
-
-                    <Form.Item
-                        name="special_status"
+                        name="Наличие особого статуса"
                         label="Наличие особого статуса"
                     >
                         <Select placeholder="Выберите статус">
-                            <Select.Option value="technopark">Технопарк</Select.Option>
-                            <Select.Option value="industrial_park">Индустриальный парк</Select.Option>
-                            <Select.Option value="industrial_complex">Промышленный комплекс</Select.Option>
-                            <Select.Option value="none">Нет</Select.Option>
+                            <Select.Option value="Технопарк">Технопарк</Select.Option>
+                            <Select.Option value="Индустриальный парк">Индустриальный парк</Select.Option>
+                            <Select.Option value="Промышленный комплекс">Промышленный комплекс</Select.Option>
+                            <Select.Option value="Сведения отсутствуют">Сведения отсутствуют</Select.Option>
                         </Select>
                     </Form.Item>
 
                     <Form.Item
-                        name="support_measures"
+                        name="Данные об оказанных мерах поддержки"
                         label="Данные об оказанных мерах поддержки"
                     >
                         <Select
-                            mode="multiple"
                             placeholder="Выберите меры поддержки"
                         >
-                            <Select.Option value="tax_benefits">Налоговые льготы</Select.Option>
-                            <Select.Option value="subsidies">Субсидии</Select.Option>
-                            <Select.Option value="grants">Гранты</Select.Option>
-                            <Select.Option value="preferential_loans">Льготные кредиты</Select.Option>
-                            <Select.Option value="property_support">Имущественная поддержка</Select.Option>
-                            <Select.Option value="infrastructure">Инфраструктурная поддержка</Select.Option>
-                            <Select.Option value="consulting">Консультационная поддержка</Select.Option>
-                            <Select.Option value="export_support">Поддержка экспорта</Select.Option>
-                            <Select.Option value="innovation_support">Инновационная поддержка</Select.Option>
-                            <Select.Option value="none">Меры поддержки не оказывались</Select.Option>
+                            <Select.Option value={"Да"}>Да</Select.Option>
+                            <Select.Option value={"Нет"}>Нет</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>
@@ -154,7 +120,7 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="revenue"
+                        name="Выручка предприятия, тыс. руб"
                         label="Выручка предприятия, тыс. руб"
                     >
                         <InputNumber
@@ -167,7 +133,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="net_profit"
+                        name="Чистая прибыль (убыток),тыс. руб."
                         label="Чистая прибыль (убыток), тыс. руб."
                     >
                         <InputNumber
@@ -181,7 +147,7 @@ export const steps = [
 
                 <Col span={12}>
                     <Form.Item
-                        name="production_capacity_utilization"
+                        name="Уровень загрузки производственных мощностей"
                         label="Уровень загрузки производственных мощностей, %"
                     >
                         <InputNumber
@@ -195,7 +161,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="moscow_investments"
+                        name="Инвестиции в Мск  тыс. руб."
                         label="Инвестиции в Мск, тыс. руб."
                     >
                         <InputNumber
@@ -217,7 +183,7 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="moscow_staff"
+                        name="Среднесписочная численность персонала, работающего в Москве, чел"
                         label="Среднесписочная численность персонала, работающего в Москве, чел"
                     >
                         <InputNumber
@@ -228,7 +194,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="moscow_salary_fund"
+                        name="Фонд оплаты труда  сотрудников, работающих в Москве, тыс. руб."
                         label="Фонд оплаты труда сотрудников, работающих в Москве, тыс. руб."
                     >
                         <InputNumber
@@ -243,7 +209,7 @@ export const steps = [
 
                 <Col span={12}>
                     <Form.Item
-                        name="moscow_average_salary"
+                        name="Средняя з.п. сотрудников, работающих в Москве,  тыс.руб."
                         label="Средняя з.п. сотрудников, работающих в Москве, тыс.руб."
                     >
                         <InputNumber
@@ -265,7 +231,7 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="moscow_taxes"
+                        name="Налоги, уплаченные в бюджет Москвы (без акцизов), тыс.руб."
                         label="Налоги, уплаченные в бюджет Москвы (без акцизов), тыс.руб."
                     >
                         <InputNumber
@@ -278,7 +244,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="profit_tax"
+                        name="Налог на прибыль, тыс.руб."
                         label="Налог на прибыль, тыс.руб."
                     >
                         <InputNumber
@@ -291,7 +257,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="property_tax"
+                        name="Налог на имущество, тыс.руб."
                         label="Налог на имущество, тыс.руб."
                     >
                         <InputNumber
@@ -304,7 +270,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="land_tax"
+                        name="Налог на землю, тыс.руб."
                         label="Налог на землю, тыс.руб."
                     >
                         <InputNumber
@@ -319,7 +285,7 @@ export const steps = [
 
                 <Col span={12}>
                     <Form.Item
-                        name="personal_income_tax"
+                        name="НДФЛ, тыс.руб."
                         label="НДФЛ, тыс.руб."
                     >
                         <InputNumber
@@ -332,7 +298,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="transport_tax"
+                        name="Транспортный налог, тыс.руб."
                         label="Транспортный налог, тыс.руб."
                     >
                         <InputNumber
@@ -345,7 +311,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="other_taxes"
+                        name="Прочие налоги"
                         label="Прочие налоги, тыс.руб."
                     >
                         <InputNumber
@@ -358,7 +324,7 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="excise_taxes"
+                        name="Акцизы, тыс. руб."
                         label="Акцизы, тыс. руб."
                     >
                         <InputNumber
@@ -380,19 +346,19 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="export_supplies"
+                        name="Наличие поставок продукции на экспорт"
                         label="Наличие поставок продукции на экспорт"
                     >
                         <Select placeholder="Выберите вариант">
-                            <Select.Option value="yes">Да</Select.Option>
-                            <Select.Option value="no">Нет</Select.Option>
+                            <Select.Option value="Да">Да</Select.Option>
+                            <Select.Option value="Нет">Нет</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>
 
                 <Col span={12}>
                     <Form.Item
-                        name="export_volume"
+                        name="Объем экспорта, тыс. руб."
                         label="Объем экспорта, тыс. руб."
                     >
                         <InputNumber
@@ -407,7 +373,7 @@ export const steps = [
 
                 <Col span={24}>
                     <Form.Item
-                        name="export_volume_previous_year"
+                        name="Объем экспорта (млн руб.) за предыдущий календарный год"
                         label="Объем экспорта (млн руб.) за предыдущий календарный год"
                     >
                         <InputNumber
@@ -429,52 +395,38 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="production_coords"
+                        name="Координаты адреса производства"
                         label="Координаты адреса производства"
                     >
                         <Input placeholder="Широта, долгота" />
                     </Form.Item>
 
                     <Form.Item
-                        name="district"
+                        name="Округ"
                         label="Округ"
                     >
-                        <Select placeholder="Выберите округ">
-                            <Select.Option value="central">Центральный округ</Select.Option>
-                            <Select.Option value="northern">Северный округ</Select.Option>
-                            <Select.Option value="north_eastern">Северо-Восточный округ</Select.Option>
-                            <Select.Option value="eastern">Восточный округ</Select.Option>
-                            <Select.Option value="south_eastern">Юго-Восточный округ</Select.Option>
-                            <Select.Option value="southern">Южный округ</Select.Option>
-                            <Select.Option value="south_western">Юго-Западный округ</Select.Option>
-                            <Select.Option value="western">Западный округ</Select.Option>
-                            <Select.Option value="north_western">Северо-Западный округ</Select.Option>
-                            <Select.Option value="zelenograd">Зеленоградский округ</Select.Option>
-                        </Select>
+                        <Input placeholder="Округ..." />
+                        {/* <Select placeholder="Выберите округ">
+                            <Select.Option value="ЦАО">Центральный административный округ (ЦАО)</Select.Option>
+                            <Select.Option value="САО">Северный административный округ (САО)</Select.Option>
+                            <Select.Option value="СВАО">Северо-Восточный административный округ (СВАО)</Select.Option>
+                            <Select.Option value="ВАО">Восточный административный округ (ВАО)</Select.Option>
+                            <Select.Option value="ЮВАО">Юго-Восточный административный округ (ЮВАО)</Select.Option>
+                            <Select.Option value="ЮАО">Южный административный округ (ЮАО)</Select.Option>
+                            <Select.Option value="ЮЗАО">Юго-Западный административный округ (ЮЗАО)</Select.Option>
+                            <Select.Option value="ЗАО">Западный административный округ (ЗАО)</Select.Option>
+                            <Select.Option value="СЗАО">Северо-Западный административный округ (СЗАО)</Select.Option>
+                            <Select.Option value="ЗелАО">Зеленоградский административный округ (ЗелАО)</Select.Option>
+                        </Select> */}
                     </Form.Item>
                 </Col>
 
                 <Col span={12}>
                     <Form.Item
-                        name="region"
+                        name="Район"
                         label="Район"
                     >
-                        <Select placeholder="Выберите район">
-                            <Select.Option value="arbat">Арбат</Select.Option>
-                            <Select.Option value="basmanny">Басманный</Select.Option>
-                            <Select.Option value="zamoskvorechye">Замоскворечье</Select.Option>
-                            <Select.Option value="krasnoselsky">Красносельский</Select.Option>
-                            <Select.Option value="meshchansky">Мещанский</Select.Option>
-                            <Select.Option value="presnensky">Пресненский</Select.Option>
-                            <Select.Option value="tagansky">Таганский</Select.Option>
-                            <Select.Option value="tverskoy">Тверской</Select.Option>
-                            <Select.Option value="khamovniki">Хамовники</Select.Option>
-                            <Select.Option value="yakimanka">Якиманка</Select.Option>
-                            <Select.Option value="aeroport">Аэропорт</Select.Option>
-                            <Select.Option value="begovoy">Беговой</Select.Option>
-                            <Select.Option value="beskudnikovsky">Бескудниковский</Select.Option>
-                            <Select.Option value="voikovsky">Войковский</Select.Option>
-                        </Select>
+                        <Input placeholder="Район..." />
                     </Form.Item>
                 </Col>
             </Row>
@@ -487,7 +439,7 @@ export const steps = [
             <Row gutter={16}>
                 <Col span={12}>
                     <Form.Item
-                        name="year"
+                        name="Год"
                         label="Год"
                     >
                         <Select placeholder="Выберите год">
@@ -498,38 +450,35 @@ export const steps = [
                     </Form.Item>
 
                     <Form.Item
-                        name="confirmed"
+                        name="confirmation_status"
                         label="Подтвержден"
                         rules={[{ required: true, message: 'Укажите статус!' }]}
                     >
                         <Select placeholder="Выберите статус">
-                            <Select.Option value="confirmed">Подтвержден пользователем</Select.Option>
-                            {/* <Select.Option value="user_confirmed">Подтвержден пользователем</Select.Option> */}
-                            <Select.Option value="not_confirmed">Не подтвержден</Select.Option>
+                            <Select.Option value="Подтвержден">Подтвержден пользователем</Select.Option>
+                            <Select.Option value="Не подтвержден">Не подтвержден</Select.Option>
                         </Select>
                     </Form.Item>
                 </Col>
 
                 <Col span={12}>
                     <Form.Item
-                        name="confirmed_by"
+                        name="Кем подтвержден"
                         label="Кем подтвержден"
                     >
-                        <Select placeholder="Выберите источник">
-                            <Select.Option value="fsin">ФСИН</Select.Option>
-                            <Select.Option value="rosstat">Росстат</Select.Option>
-                            <Select.Option value="user">Пользователь</Select.Option>
-                            <Select.Option value="fns">ФНС</Select.Option>
-                            <Select.Option value="minpromtorg">Минпромторг</Select.Option>
-                            <Select.Option value="moscow_government">Правительство Москвы</Select.Option>
-                        </Select>
+                        <Input placeholder="Кем подтвержден..." />
                     </Form.Item>
 
                     <Form.Item
-                        name="last_modified_date"
+                        name="Дата последнего изменения"
                         label="Дата последнего изменения"
                     >
-                        <Input type="date" />
+                        <DatePicker
+                            style={{ width: "100%" }}
+                            format={{
+                                format: 'DD.MM.YYYY'
+                            }}
+                        />
                     </Form.Item>
                 </Col>
             </Row>
