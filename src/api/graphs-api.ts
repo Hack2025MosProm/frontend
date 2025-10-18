@@ -16,8 +16,19 @@ function getUniqueGraphsByType(graphs: any[]): any[] {
 export const graphsApi = {
     getAll: async (ids: number[]) => {
         // генерация
-        await axiosBase.post('/graphs/generate-all', ids);
         let { data } = await axiosBase.get('/graphs');
+        if (Array.isArray(data) && data?.length > 0) {
+            let promises: Promise<any>[] = [];
+
+            data?.forEach(g => {
+                promises.push(axiosBase.delete(`/graphs/${g.id}`))
+            });
+
+            await Promise.all(promises);
+        }
+
+        await axiosBase.post('/graphs/generate-all', ids);
+
         return getUniqueGraphsByType(data);
     }
 }

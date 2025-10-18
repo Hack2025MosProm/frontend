@@ -3,17 +3,20 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import './style.scss'
 import { steps } from '../model/steps';
-import type { Company } from '@/api/organizations-api';
+import { organizationApi, type Company } from '@/api/organizations-api';
 import dayjs from 'dayjs';
 
 
 interface Props {
     className?: string;
     organization?: Company
+    onSaved?: () => void
+    isNew?: boolean
 }
 
-export const KpForm: React.FC<Props> = ({ className, organization }) => {
+export const KpForm: React.FC<Props> = ({ className, isNew, organization, onSaved }) => {
     const [currentStep, setCurrentStep] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
     //@ts-ignore
     const [stepStatus, setStepStatus] = useState<number[]>([]);
@@ -92,16 +95,50 @@ export const KpForm: React.FC<Props> = ({ className, organization }) => {
 
     const handleSubmit = async (values: any) => {
         try {
+            setLoading(true);
+
             const sendData = {
                 ...(organization || {}),
                 ...values,
                 ['Дата последнего изменения']: values['Дата последнего изменения'] ? dayjs(values['Дата последнего изменения']).format() : null,
             };
 
-            console.log(sendData);
-        } catch (err) {
+            const {
+                id,
+                name,
+                full_name,
+                inn,
+                year,
+                spark_status,
+                main_industry,
+                company_size_final,
+                organization_type,
+                support_measures,
+                special_status,
+                confirmation_status,
+                confirmed_at,
+                confirmer_identifier,
+                json_data,
+                created_at,
+                updated_at,
+                ...rest
+            } = sendData;
 
-        } finally { }
+            if (isNew) {
+                await organizationApi.createFromJsom(rest);
+            } else {
+                await organizationApi.updateJsonData(id, rest);
+            }
+
+            onSaved?.();
+
+            message.success("Данные успешно обновлены!")
+        } catch (err) {
+            message.warning('Не удалось сохранить данные формы');
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
     }
 
 
@@ -153,7 +190,7 @@ export const KpForm: React.FC<Props> = ({ className, organization }) => {
                             </Button>
                         )}
                         {currentStep === steps.length - 1 && (
-                            <Button style={{ width: '100%' }} type="primary" htmlType="submit">
+                            <Button loading={loading} style={{ width: '100%' }} type="primary" htmlType="submit">
                                 Сохранить
                             </Button>
                         )}

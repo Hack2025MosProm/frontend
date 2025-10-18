@@ -52,14 +52,12 @@ const getGraphSize = (graphType: string) => {
 
 export const Dashboard: React.FC<Props> = ({ className }) => {
     const { loading } = useCompanies();
-    const { graphs, loading: graphLoading } = useGraphs();
-
-    console.log(graphs);
+    const { graphs, refetch, loading: graphLoading } = useGraphs();
 
     return (
         <div className={className}>
             <Skeleton active={loading || graphLoading} loading={loading || graphLoading}>
-                <h1>Дашборд</h1>
+                <h1> Единый дашборд по промышленности</h1>
 
                 <Row gutter={[32, 32]}>
                     {graphs.map((graph) => {
@@ -83,7 +81,9 @@ export const Dashboard: React.FC<Props> = ({ className }) => {
                     })}
                 </Row>
 
-                <DataFilter />
+                <DataFilter
+                    onSubmit={data => refetch(data.company)}
+                />
             </Skeleton>
         </div>
     );

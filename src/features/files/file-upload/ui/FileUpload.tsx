@@ -39,7 +39,7 @@ export const FileUpload: React.FC<Props> = ({ className, onFileUploaded }) => {
 
             message.success('Файл успешно загружен');
             setFileList([]);
-            //onFileUploaded?.();
+            onFileUploaded?.();
         } catch (err) {
             message.error(`${fileList[0].name} не удалось загрузить`);
         } finally {

@@ -1,5 +1,5 @@
 import { graphsApi } from "@/api";
-import { useCompanies } from "@/providers";
+import { useAuth, useCompanies } from "@/providers";
 import { message } from "antd";
 import { useEffect, useState } from "react"
 
@@ -17,12 +17,14 @@ interface GraphData {
 export const useGraphs = () => {
     const [loading, setLoading] = useState(false);
     const { selectedIds } = useCompanies();
-    const [items, setItems] = useState<GraphData[]>([])
+    const [items, setItems] = useState<GraphData[]>([]);
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
+        if (!isAuthenticated) return;
         if (!Array.isArray(selectedIds) || selectedIds.length === 0) return;
         fetchGraphs(selectedIds);
-    }, [selectedIds])
+    }, [selectedIds, isAuthenticated])
 
     const fetchGraphs = async (ids: number[]) => {
         try {
@@ -40,5 +42,6 @@ export const useGraphs = () => {
     return {
         loading,
         graphs: items,
+        refetch: fetchGraphs,
     }
 }
