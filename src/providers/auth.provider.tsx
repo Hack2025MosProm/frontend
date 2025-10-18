@@ -66,6 +66,8 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
             const responseUser = await axiosBase.get('/auth/me');
             setUser(responseUser.data);
+
+            window.location.reload();
         } catch (error) {
             console.error('Login error:', error);
             throw error;

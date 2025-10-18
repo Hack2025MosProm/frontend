@@ -168,9 +168,6 @@ export interface CompanyEn {
 
 
 export const organizationApi = {
-    getAll: async () => {
-        return axios.get('/organizations.json');
-    },
     getCompanies: async () => {
         const { data } = await axiosBase.get('/companies');
 
