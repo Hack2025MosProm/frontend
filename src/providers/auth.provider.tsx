@@ -11,11 +11,17 @@ interface User {
     email: string;
 }
 
+interface RegisterData {
+    username: string;
+    password: string;
+}
+
 interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
     login: (username: string, password: string) => Promise<void>;
+    register: (registerData: RegisterData) => Promise<void>;
     logout: () => void;
     checkMe: () => Promise<void>;
 }
@@ -68,6 +74,30 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
     };
 
+    // Метод регистрации
+    const register = async (registerData: RegisterData): Promise<void> => {
+        try {
+            setIsLoading(true);
+
+            // Отправляем запрос на регистрацию
+            await axiosBase.post('/auth/register', registerData, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                }
+            });
+
+            // После успешной регистрации автоматически логиним пользователя
+            await login(registerData.username, registerData.password);
+
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     // Метод выхода из аккаунта
     const logout = (): void => {
         setUser(null);
@@ -112,6 +142,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         isAuthenticated,
         isLoading,
         login,
+        register,
         logout,
         checkMe
     };

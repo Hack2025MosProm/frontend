@@ -23,6 +23,8 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
         try {
             setLoading(true);
             const { data } = await organizationApi.getAll();
+            //const r = await organizationApi.getCompanies();
+            //console.log(r.data);
             setItems(data);
         } catch (err) {
             console.log(err);
@@ -66,6 +68,7 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
                         ),
                     }
                 ]}
+                rowKey={'inn'}
                 loading={loading}
                 dataSource={items}
             />

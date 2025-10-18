@@ -39,7 +39,7 @@ export const FileUpload: React.FC<Props> = ({ className, onFileUploaded }) => {
 
             message.success('Файл успешно загружен');
             setFileList([]);
-            onFileUploaded?.();
+            //onFileUploaded?.();
         } catch (err) {
             message.error(`${fileList[0].name} не удалось загрузить`);
         } finally {
@@ -50,7 +50,7 @@ export const FileUpload: React.FC<Props> = ({ className, onFileUploaded }) => {
     return (
         <div className={clsx(className)}>
             <Dragger
-                accept=".xls,.xlsx,.csv"
+                accept=".csv"
                 beforeUpload={(file) => {
                     setFileList([file]);
                     return false;
