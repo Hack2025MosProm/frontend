@@ -7,9 +7,10 @@ interface Props {
     opened?: boolean;
     organization?: Company;
     onClose?: () => void
+    onSaved?: () => void
 }
 
-export const KpFormDrawer: React.FC<Props> = ({ organization, opened, onClose }) => {
+export const KpFormDrawer: React.FC<Props> = ({ organization, opened, onClose, onSaved }) => {
     return (
         <Drawer
             title={opened ? "Добавление организации" : `Редактирование организации: ${organization?.name || '-'} ${organization ? ', ИНН: ' + organization.inn : ''}`}
@@ -23,7 +24,11 @@ export const KpFormDrawer: React.FC<Props> = ({ organization, opened, onClose })
             }}
         >
             {(opened || organization) && (
-                <KpForm organization={organization} />
+                <KpForm
+                    organization={organization}
+                    onSaved={onSaved}
+                    isNew={opened}
+                />
             )}
         </Drawer>
     );

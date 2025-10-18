@@ -1,36 +1,20 @@
-import { organizationApi } from '@/api';
 import type { Company, } from '@/api/organizations-api';
 import { KpFormDrawer } from '@/features/kp-form';
+import { useCompanies } from '@/providers';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, message, Space, Table, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Space, Table, Typography } from 'antd';
+import React, { useState } from 'react';
 
 interface Props {
     className?: string;
 }
 
 export const OrganizationsPage: React.FC<Props> = ({ className }) => {
-    const [loading, setLoading] = useState(false);
-    const [items, setItems] = useState<Company[]>([]);
     const [editingOrganization, setEditingOrganization] = useState<Company | null>(null);
     const [newOrg, setNewOrg] = useState(false);
+    const { companies, refreshCompanies, loading } = useCompanies();
 
-    useEffect(() => {
-        fetchOrganizations();
-    }, []);
 
-    const fetchOrganizations = async () => {
-        try {
-            setLoading(true);
-            const data = await organizationApi.getCompanies();
-            setItems(data || []);
-        } catch (err) {
-            console.log(err);
-            message.warning(`При загрузке организаций произошла ошибка!`);
-        } finally {
-            setLoading(false);
-        }
-    }
 
     return (
         <div className={className}>
@@ -68,7 +52,7 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
                 ]}
                 rowKey={'id'}
                 loading={loading}
-                dataSource={items}
+                dataSource={companies}
             />
 
             <KpFormDrawer
@@ -77,6 +61,11 @@ export const OrganizationsPage: React.FC<Props> = ({ className }) => {
                 onClose={() => {
                     setEditingOrganization(null);
                     setNewOrg(false);
+                }}
+                onSaved={() => {
+                    refreshCompanies();
+                    setNewOrg(false);
+                    setEditingOrganization(null);
                 }}
             />
         </div>

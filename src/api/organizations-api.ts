@@ -1,6 +1,5 @@
 //import axiosBase from "@/config/axios"
 import axiosBase from "@/config/axios";
-import axios from "axios";
 import dayjs from "dayjs";
 
 export interface Organization {
@@ -168,19 +167,31 @@ export interface CompanyEn {
 
 
 export const organizationApi = {
-    getCompanies: async () => {
-        const { data } = await axiosBase.get('/companies');
+    getCompanies: async (filters?: Record<string, any>) => {
+        const { data } = await axiosBase.get(`/companies/${filters ? 'filter/' : ''}`, {
+            params: filters
+        });
 
         const companies = data?.companies || [];
         const parsed = companies.map((c: any) => {
             const json = c?.json_data || {}
-            
+
             return ({
                 ...c,
                 ...json,
-                ['Дата последнего изменения']: json['Дата последнего изменения'] ?  dayjs(json['Дата последнего изменения']) : undefined
+                ['Дата последнего изменения']: json['Дата последнего изменения'] ? dayjs(json['Дата последнего изменения']) : undefined
             })
         });
-        return parsed;
+        return parsed.sort((a: any, b: any) => a.id - b.id);
+    },
+    updateJsonData: async (companyId: number, data: any) => {
+        return await axiosBase.patch(`companies/${companyId}/json-data`, JSON.stringify({ json_data: data }), {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    },
+    createFromJsom: async (data: Record<string, any>) => {
+        return axiosBase.post(`companies/create-from-json`, JSON.stringify(data));
     }
 }

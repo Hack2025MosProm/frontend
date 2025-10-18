@@ -1,27 +1,62 @@
+import { organizationApi } from '@/api';
+import type { Company } from '@/api/organizations-api';
 import { useCompanies } from '@/providers';
 import { DownloadOutlined, FilterOutlined } from '@ant-design/icons';
 import { Badge, Button, Drawer, FloatButton, Form, message, Select, Space, } from 'antd';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 interface Props {
     className?: string;
+    onSubmit?: (filters: { company: number[], year?: number[] }) => void
 }
 
 type Mode = 'filter' | 'download';
 
-export const DataFilter: React.FC<Props> = ({ className }) => {
+export const DataFilter: React.FC<Props> = ({ className, onSubmit }) => {
     const [open, setOpen] = useState(false);
     const [form] = Form.useForm();
     const [mode, setMode] = useState<Mode>('filter');
-    const { loading: companyLoading, companiesUnique, selectCompanies, selectedIds, } = useCompanies();
+    const { loading: companyLoading, companiesUnique, } = useCompanies();
+    const [companies, setCompanies] = useState<Company[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [years, setYears] = useState<number[]>([])
 
     const [selectedFiltersCount, setSelectedFiltersCount] = useState(0);
 
     useEffect(() => {
-        form.setFieldValue('company', selectedIds)
+        //form.setFieldValue('company', selectedIds)
     }, [companiesUnique])
 
+
+    const loadCompanies = async (filters?: Record<string, any>) => {
+        try {
+            setLoading(true);
+            const data = await organizationApi.getCompanies(filters);
+            setCompanies(data);
+        } catch (err) {
+            console.error('Failed to load companies:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const debounce = (func: Function, delay: number) => {
+        let timeoutId: any;
+        return (...args: any[]) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => func(...args), delay);
+        };
+    };
+
+    const debouncedRefreshCompanies = useCallback(
+        debounce(async (val: any) => {
+            setCompanies([])
+            form.setFieldValue('company', []);
+            await loadCompanies({ year: val });
+        }, 500),
+        [loadCompanies, form]
+    );
 
     const showDrawer = (mode: Mode = 'filter') => {
         setOpen(true);
@@ -73,8 +108,7 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
 
     const handleSubmitForm = (values: any) => {
         try {
-            const { company, } = values;
-            selectCompanies(company)
+            onSubmit?.(values);
             onClose();
         } catch (err) {
             console.log(err);
@@ -151,6 +185,7 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
                                     <Button
                                         onClick={handleApplyFilters}
                                         type="primary"
+                                        loading={loading}
                                     >
                                         Применить фильтры
                                     </Button>
@@ -184,13 +219,14 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
                     onFieldsChange={handleFormChange}
                     onFinish={handleSubmitForm}
                 >
-                    <Form.Item name="company" label="Организации:">
+                    <Form.Item name="company" label={years.length === 0 ? 'Укажите год' : "Организации:"}>
                         <Select
                             mode='multiple'
-                            loading={companyLoading}
+                            loading={companyLoading || loading}
                             placeholder="Выбранные организации..."
+                            disabled={years.length === 0}
                         >
-                            {companiesUnique.map(c => (
+                            {companies.map(c => (
                                 <Select.Option key={c.id} value={c.id}>
                                     {c.name}
                                 </Select.Option>
@@ -202,10 +238,19 @@ export const DataFilter: React.FC<Props> = ({ className }) => {
                         name="year"
                         label="Год"
                     >
-                        <Select placeholder="Выберите год">
-                            <Select.Option value={2024}>2024</Select.Option>
+                        <Select
+                            mode='multiple'
+                            placeholder="Выберите год"
+                            value={years}
+                            onChange={async (val) => {
+                                setYears(val);
+                                debouncedRefreshCompanies(val);
+                            }}
+                        >
                             <Select.Option value={2023}>2023</Select.Option>
                             <Select.Option value={2022}>2022</Select.Option>
+                            <Select.Option value={2021}>2021</Select.Option>
+                            <Select.Option value={2020}>2020</Select.Option>
                         </Select>
                     </Form.Item>
                     <Form.Item

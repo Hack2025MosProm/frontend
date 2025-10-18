@@ -8,7 +8,7 @@ interface CompaniesContextType {
     selectedIds: number[]
     loading: boolean;
     error: string | null;
-    refreshCompanies: () => Promise<void>;
+    refreshCompanies: (filters?: Record<string, any>) => Promise<void>;
 
     // Методы для выбранных компаний
     toggleCompany: (companyId: number) => void;
@@ -34,11 +34,11 @@ export const CompaniesProvider: React.FC<CompaniesProviderProps> = ({ children }
 
     const selectedCompanies = companies.filter(company => selectedIds.includes(company.id));
 
-    const loadCompanies = async () => {
+    const loadCompanies = async (filters?: Record<string, any>) => {
         try {
             setLoading(true);
             setError(null);
-            const data = await organizationApi.getCompanies();
+            const data = await organizationApi.getCompanies(filters);
             setCompanies(data);
 
             const uni = getUniqueCompaniesByInn(data);
@@ -51,8 +51,8 @@ export const CompaniesProvider: React.FC<CompaniesProviderProps> = ({ children }
         }
     };
 
-    const refreshCompanies = async () => {
-        await loadCompanies();
+    const refreshCompanies = async (filters?: Record<string, any>) => {
+        await loadCompanies(filters);
     };
 
     // Методы для выбранных компаний
