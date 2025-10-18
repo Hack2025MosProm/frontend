@@ -500,10 +500,11 @@ export const steps = [
                     <Form.Item
                         name="confirmed"
                         label="Подтвержден"
+                        rules={[{ required: true, message: 'Укажите статус!' }]}
                     >
                         <Select placeholder="Выберите статус">
-                            <Select.Option value="confirmed">Подтвержден</Select.Option>
-                            <Select.Option value="user_confirmed">Подтвержден пользователем</Select.Option>
+                            <Select.Option value="confirmed">Подтвержден пользователем</Select.Option>
+                            {/* <Select.Option value="user_confirmed">Подтвержден пользователем</Select.Option> */}
                             <Select.Option value="not_confirmed">Не подтвержден</Select.Option>
                         </Select>
                     </Form.Item>

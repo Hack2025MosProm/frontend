@@ -2,13 +2,14 @@ import React from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
 import ruRu from 'antd/locale/ru_Ru';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from '@/providers';
+import { AuthProvider, UploadModalProvider } from '@/providers';
 import { PublicRoute } from '@/components';
 import { AuthPage } from '@/pages/auth';
 import { MainLayout } from '@/layouts';
 import './assets/styles/main.scss'
 import { Dashboard } from './pages/dashboard';
 import { KpPage } from './pages/kp-page';
+import { OrganizationsPage } from './pages/organizations';
 
 
 const { defaultAlgorithm } = antdTheme;
@@ -48,40 +49,50 @@ export const App: React.FC<Props> = () => {
     >
       <BrowserRouter>
         <AuthProvider>
-          <div className="main-app">
-            <Routes>
-              {/* --------- Роуты без лейаута --------- */}
-              <Route
-                path="/auth"
-                element={
-                  <PublicRoute>
-                    <AuthPage />
-                  </PublicRoute>
-                }
-              />
-
-
-              {/* --------- Роуты с лейаутом --------- */}
-              <Route element={<MainLayout />}>
+          <UploadModalProvider>
+            <div className="main-app">
+              <Routes>
+                {/* --------- Роуты без лейаута --------- */}
                 <Route
-                  path="/"
+                  path="/auth"
                   element={
                     <PublicRoute>
-                      <Dashboard />
+                      <AuthPage />
                     </PublicRoute>
                   }
                 />
-                <Route
-                  path="/kp"
-                  element={
-                    <PublicRoute>
-                      <KpPage />
-                    </PublicRoute>
-                  }
-                />
-              </Route>
-            </Routes>
-          </div>
+
+
+                {/* --------- Роуты с лейаутом --------- */}
+                <Route element={<MainLayout />}>
+                  <Route
+                    path="/"
+                    element={
+                      <PublicRoute>
+                        <Dashboard />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route
+                    path="/kp"
+                    element={
+                      <PublicRoute>
+                        <KpPage />
+                      </PublicRoute>
+                    }
+                  />
+                  <Route
+                    path='/organizations'
+                    element={
+                      <PublicRoute>
+                        <OrganizationsPage />
+                      </PublicRoute>
+                    }
+                  />
+                </Route>
+              </Routes>
+            </div>
+          </UploadModalProvider>
         </AuthProvider>
       </BrowserRouter>
     </ConfigProvider>

@@ -1,9 +1,9 @@
 import React from 'react';
 import './style.scss'
 import { Menu, Spin, type MenuProps } from 'antd';
-import { DashboardOutlined, EditOutlined, LogoutOutlined } from '@ant-design/icons';
+import { BankOutlined, DashboardOutlined, LogoutOutlined, UploadOutlined } from '@ant-design/icons';
 import { Link, Outlet, useLocation, } from 'react-router-dom';
-import { useAuth, } from '../providers';
+import { useAuth, useUploadModal, } from '../providers';
 import clsx from 'clsx';
 import { Footer } from '@/components/footer';
 import { Header } from '@/components/header';
@@ -26,6 +26,7 @@ interface MenuItemConfig {
 export const MainLayout: React.FC<Props> = ({ }) => {
     const { logout } = useAuth();
     const location = useLocation();
+    const { openUploadModal } = useUploadModal();
 
     const menuConfig: MenuItemConfig[] = [
         {
@@ -35,10 +36,16 @@ export const MainLayout: React.FC<Props> = ({ }) => {
             path: '/'
         },
         {
-            key: 'kp',
-            label: 'Форма для ввода данных',
-            icon: <EditOutlined />,
-            path: '/kp'
+            key: 'organizations',
+            label: 'Организации',
+            icon: <BankOutlined />,
+            path: '/organizations',
+        },
+        {
+            key: 'upload',
+            label: 'Загрузить файл',
+            icon: <UploadOutlined />,
+            onClick: openUploadModal,
         },
         {
             key: 'logout',
