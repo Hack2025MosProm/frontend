@@ -3,8 +3,8 @@ import { ConfigProvider, theme as antdTheme } from 'antd';
 import ruRu from 'antd/locale/ru_Ru';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider, UploadModalProvider } from '@/providers';
-import { PublicRoute } from '@/components';
-import { AuthPage } from '@/pages/auth';
+import { PrivateRoute, PublicRoute } from '@/components';
+import { AuthPage, SignupPage } from '@/pages/auth';
 import { MainLayout } from '@/layouts';
 import './assets/styles/main.scss'
 import { Dashboard } from './pages/dashboard';
@@ -62,31 +62,40 @@ export const App: React.FC<Props> = () => {
                   }
                 />
 
+                <Route
+                  path='/signup'
+                  element={
+                    <PublicRoute>
+                      <SignupPage />
+                    </PublicRoute>
+                  }
+                />
+
 
                 {/* --------- Роуты с лейаутом --------- */}
                 <Route element={<MainLayout />}>
                   <Route
                     path="/"
                     element={
-                      <PublicRoute>
+                      <PrivateRoute>
                         <Dashboard />
-                      </PublicRoute>
+                      </PrivateRoute>
                     }
                   />
                   <Route
                     path="/kp"
                     element={
-                      <PublicRoute>
+                      <PrivateRoute>
                         <KpPage />
-                      </PublicRoute>
+                      </PrivateRoute>
                     }
                   />
                   <Route
                     path='/organizations'
                     element={
-                      <PublicRoute>
+                      <PrivateRoute>
                         <OrganizationsPage />
-                      </PublicRoute>
+                      </PrivateRoute>
                     }
                   />
                 </Route>

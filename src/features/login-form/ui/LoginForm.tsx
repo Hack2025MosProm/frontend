@@ -1,7 +1,7 @@
 import { useAuth } from '@/providers';
 import { Button, Form, Input, message } from 'antd';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Props {
     className?: string;
@@ -14,8 +14,8 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
     const onFinish = async (values: { username: string; password: string }) => {
         try {
             await login(values.username, values.password);
-            
-            setTimeout(()=>{
+
+            setTimeout(() => {
                 navigate('/');
             }, 500)
             message.success('Вы успешно вошли!');
@@ -52,6 +52,10 @@ export const LoginForm: React.FC<Props> = ({ className }) => {
                 >
                     Войти
                 </Button>
+            </Form.Item>
+
+            <Form.Item style={{ textAlign: 'center' }}>
+                <Link to={'/signup'}>Создать аккаунт</Link>
             </Form.Item>
         </Form>
     );

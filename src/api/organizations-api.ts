@@ -1,4 +1,5 @@
 //import axiosBase from "@/config/axios"
+import axiosBase from "@/config/axios";
 import axios from "axios";
 
 export interface Organization {
@@ -52,5 +53,8 @@ export interface Organization {
 export const organizationApi = {
     getAll: async () => {
         return axios.get('/organizations.json');
+    },
+    getCompanies: async () => {
+        return axiosBase.get('/companies')
     }
 }
