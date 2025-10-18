@@ -5,7 +5,8 @@ import plot1 from '@/assets/images/plots/plot1.png';
 import plot2 from '@/assets/images/plots/plot2.png';
 import plot3 from '@/assets/images/plots/plot3.png';
 import { Card, Col, Divider, Row, Statistic, Typography } from 'antd';
-import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
+import { ArrowUpOutlined, ArrowDownOutlined, } from '@ant-design/icons';
+import { DataFilter } from '@/features/data-filter';
 
 interface Props {
     className?: string;
@@ -26,6 +27,8 @@ export const Dashboard: React.FC<Props> = ({ className }) => {
         <div className={className}>
             <h1>Компании Москвы</h1>
             <StatisticCard />
+
+            <DataFilter />
 
             <Typography.Title>Индикаторы</Typography.Title>
             <div className={`finance-cards ${className || ''}`}>

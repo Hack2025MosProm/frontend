@@ -1,21 +1,36 @@
 import { Button, Col, Form, message, Row, Tabs } from 'antd';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './style.scss'
 import { steps } from '../model/steps';
+import type { Organization } from '@/api/organizations-api';
 
 
 interface Props {
     className?: string;
+    organization?: Organization
 }
 
-export const KpForm: React.FC<Props> = ({ className }) => {
+export const KpForm: React.FC<Props> = ({ className, organization }) => {
     const [currentStep, setCurrentStep] = useState(0);
     const [form] = Form.useForm();
     //@ts-ignore
     const [stepStatus, setStepStatus] = useState<number[]>([]);
     //const carouselRef = useRef<any>(null);
 
+    useEffect(() => {
+        if (!organization) {
+            setCurrentStep(0);
+            form.resetFields();
+            return;
+        }
+        form.setFieldsValue(organization);
+
+        return () => {
+            setCurrentStep(0);
+            form.resetFields();
+        }
+    }, [organization]);
 
     const next = () => {
         console.log(currentStep, currentStep + 1);
@@ -78,7 +93,7 @@ export const KpForm: React.FC<Props> = ({ className }) => {
 
     return (
         <div className={clsx('kp-form', className)}>
-            <Form form={form} layout="vertical" onFinish={() => message.success('Форма успешно сохранена')}>
+            <Form form={form} layout="vertical" onFinish={(data) => console.log(data)}>
                 <div style={{ margin: '20px 0' }}>
                     <Tabs
                         type='card'
