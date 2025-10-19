@@ -1,6 +1,6 @@
 import React from 'react';
 import { ConfigProvider, theme as antdTheme } from 'antd';
-import ruRu from 'antd/locale/ru_Ru';
+import ruRu from 'antd/locale/ru_RU';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProvider, CompaniesProvider, UploadModalProvider } from '@/providers';
 import { PrivateRoute, PublicRoute } from '@/components';

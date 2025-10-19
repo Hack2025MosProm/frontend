@@ -14,15 +14,22 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Этап запуска (Nginx для отдачи статики)
+# Этап запуска (Nginx для отдачи статики
 FROM nginx:stable-alpine
 
-# Удаляем дефолтную конфигурацию и копируем свою (по желанию)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Копируем конфигурацию nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+# Удаляем BOM, если он есть
+RUN sed -i '1s/^\xEF\xBB\xBF//' /etc/nginx/nginx.conf
 
-# Копируем собранное приложение в папку nginx
+# Копируем собранное приложение
 COPY --from=build /app/dist /usr/share/nginx/html
+
+# Копируем entrypoint скрипт
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Используем entrypoint скрипт для runtime конфигурации
+CMD ["/entrypoint.sh"]

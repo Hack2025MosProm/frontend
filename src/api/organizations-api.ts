@@ -168,30 +168,32 @@ export interface CompanyEn {
 
 export const organizationApi = {
     getCompanies: async (filters?: Record<string, any>) => {
-        const { data } = await axiosBase.get(`/companies/${filters ? 'filter/' : ''}`, {
-            params: filters
-        });
+      const url = `companies${filters ? '/filter' : ''}`; // без ведущего /
+      const { data } = await axiosBase.get(url, { params: filters });
 
-        const companies = data?.companies || [];
-        const parsed = companies.map((c: any) => {
-            const json = c?.json_data || {}
-
-            return ({
-                ...c,
-                ...json,
-                ['Дата последнего изменения']: json['Дата последнего изменения'] ? dayjs(json['Дата последнего изменения']) : undefined
-            })
-        });
-        return parsed.sort((a: any, b: any) => a.id - b.id);
+      const companies = data?.companies || [];
+      const parsed = companies.map((c: any) => {
+        const json = c?.json_data || {};
+        return {
+          ...c,
+          ...json,
+          ['Дата последнего изменения']: json['Дата последнего изменения']
+            ? dayjs(json['Дата последнего изменения'])
+            : undefined,
+        };
+      });
+      return parsed.sort((a: any, b: any) => a.id - b.id);
     },
+
     updateJsonData: async (companyId: number, data: any) => {
-        return await axiosBase.patch(`companies/${companyId}/json-data`, JSON.stringify({ json_data: data }), {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+      return axiosBase.patch(
+        `companies/${companyId}/json-data`, // без ведущего /
+        { json_data: data },                // не нужно руками stringify
+        { headers: { 'Content-Type': 'application/json' } }
+      );
     },
+
     createFromJsom: async (data: Record<string, any>) => {
-        return axiosBase.post(`companies/create-from-json`, JSON.stringify(data));
-    }
-}
+      return axiosBase.post(`companies/create-from-json`, data); // без ведущего /
+    },
+  };

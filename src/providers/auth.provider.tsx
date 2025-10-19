@@ -39,9 +39,12 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         if (token) {
             axiosBase.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             localStorage.setItem('token', token);
+            console.log('Auth token set:', token.substring(0, 20) + '...');
+            console.log('Current baseURL:', axiosBase.defaults.baseURL);
         } else {
             delete axiosBase.defaults.headers.common['Authorization'];
             localStorage.removeItem('token');
+            console.log('Auth token cleared');
         }
     };
 
